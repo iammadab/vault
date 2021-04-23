@@ -1,9 +1,9 @@
 package main
 
 import (
-  "net/http"
-  "log"
-  "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 // Creates a map that assigns each user a vault
@@ -14,27 +14,24 @@ var vaults = map[string]map[string]string{}
 // of sending back http errors easier
 // based on taste, this doesn't feel like the best solution
 // still searching
-type ErrorStruct struct{
-  Status int `json:"status"`
-  Code   string `json:"code"`
+type ErrorStruct struct {
+	Status int    `json:"status"`
+	Code   string `json:"code"`
 }
 
+func main() {
 
-func main(){
+	// Create the mux router
+	router := mux.NewRouter()
 
-  // Create the mux router
-  router := mux.NewRouter()
+	// Define the routes
+	router.HandleFunc("/api/account", createUser).Methods("POST")
+	router.HandleFunc("/api/vault/{email}", getVaultContent).Methods("GET")
+	router.HandleFunc("/api/vault/{email}", addKey).Methods("POST")
+	router.HandleFunc("/api/vault/{email}", updateKey).Methods("PUT")
+	router.HandleFunc("/api/vault/{email}", deleteKey).Methods("DELETE")
 
-  // Define the routes
-  router.HandleFunc("/api/account", createUser).Methods("POST")
-  router.HandleFunc("/api/vault/{email}", getVaultContent).Methods("GET")
-  router.HandleFunc("/api/vault/{email}", addKey).Methods("POST")
-  router.HandleFunc("/api/vault/{email}", updateKey).Methods("PUT")
-  router.HandleFunc("/api/vault/{email}", deleteKey).Methods("DELETE")
-
-  // Start the server
-  log.Fatal(http.ListenAndServe(":8000", router))
+	// Start the server
+	log.Fatal(http.ListenAndServe(":8000", router))
 
 }
-
-
