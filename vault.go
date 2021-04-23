@@ -21,7 +21,7 @@ func getVaultContent(w http.ResponseWriter, r *http.Request) {
 	email := mux.Vars(r)["email"]
 
 	// Make sure a vault does exist
-	// if not vault found, respond accordingly
+	// if vault not found, respond accordingly
 	_, hasVault := vaults[email]
 	if hasVault == false {
 		json.NewEncoder(w).Encode(ErrorStruct{404, "ACCOUNT_NOT_FOUND"})
